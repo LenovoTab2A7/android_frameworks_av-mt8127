@@ -328,6 +328,17 @@ void OMXCodec::findMatchingCodecs(
         return;
     }
 
+    AString *tempMime = new AString(mime);
+    if (tempMime->endsWith("_cam")) {
+        // remove camera tag from mime
+        tempMime->erase(tempMime->size() - 4, 4);
+        mime = tempMime->c_str();
+    }
+    else {
+        // no camera recording, prefer software codecs
+        flags |= kPreferSoftwareCodecs;
+    }
+
     size_t index = 0;
 
 #ifdef ENABLE_AV_ENHANCEMENTS
